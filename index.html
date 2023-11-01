@@ -20,8 +20,8 @@
         //jsPsych.data.displayData();
       }
     });
-    //IST
 
+//categories cannot have overlapping words!
 var cat1 = ['category1', 'category1', 'category1', 'category1'];
 var cat2 = ['category2', 'category2', 'category2', 'category2'];
 var cat3 = ['category3', 'category3', 'category3', 'category3'];
@@ -48,8 +48,6 @@ function getCorrect(array) {
     
 }
 
-
-
 var gen_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus: `
@@ -71,7 +69,7 @@ var trial = {
     category1: cat1,
     category2name: '2',
     category2: cat2,
-    category2name: '3',
+    category3name: '3',
     category3: cat3,
     category4name: '4',
     category4: cat4,

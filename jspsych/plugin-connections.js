@@ -101,11 +101,12 @@ var jsPsychConnections = (function (jspsych) {
                 var selectedSquare = e.currentTarget;
                 //record which square was pressed and when
                 var id = selectedSquare.getAttribute("id");
+                var word = selectedSquare.getAttribute("innerHTML");
                 //create var that gets the word in the square
                 var currentTime = performance.now();
                 var pressTime = Math.round(currentTime - start_time);
-                
-                pressTimes.push([id, pressTime]);
+                //records square id (position) word in the square and time pressed
+                pressTimes.push([word, id, pressTime]);
                 
                 if (selectedSquare.getAttribute("disabled") != "disabled"){
                 //if square is not part of a category that has already been correctly guessed 
@@ -123,7 +124,7 @@ var jsPsychConnections = (function (jspsych) {
                     //change square color to selected
                     selectedSquare.style.backgroundColor = 'gray'
                     pressedSquares.push(id);
-                    console.log(pressedSquares)
+                    //console.log(id)
                 }
                 else {
                   //don't select squares if 4 have already been selected  
@@ -153,6 +154,9 @@ var jsPsychConnections = (function (jspsych) {
     
         var matchList = [];
         var wordList = [];
+
+        var idNumber = '';
+        var colorList = ['#88CCEE', '#DDCC77', '#CC6677', '#44AA99'];
         var catCount = 0;
         //event listener for submit button
           display_element
@@ -162,6 +166,9 @@ var jsPsychConnections = (function (jspsych) {
                         var word = document.getElementById(pressedSquares[i]);
                         word = word.textContent; 
                         wordList.push(word)
+                        idNumber = pressedSquares[i].toString()
+                        idNumber = idNumber.substring(1)
+                        console.log(idNumber)
                     }
                     
                     correctSquares.length === 16 ? end_trial() : null;
@@ -175,23 +182,80 @@ var jsPsychConnections = (function (jspsych) {
                         for (var i = 0; i < pressedSquares.length; i++) {
                         var square = document.getElementById(pressedSquares[i]);
                         
-                        if (matchList[0] === true) {
-                            square.style.backgroundColor = '#88CCEE'
-                            square.style.color = '#88CCEE'
+                        /*if (matchList[i] === true) {
+                            var idstr = '';
+                            catCount === 1 ? idstr = i.toString() : idstr = (i * catCount - 1).toString()
+                            var switchSquare = document.getElementById("s" + idstr);
+                            switchSquare.style.backgroundColor = colorList[i]
+                            switchSquare.setAttribute("disabled", "disabled"); 
+                            if (wordList.includes(switchSquare.textContent)) {
+                                switchSquare.textContent = switchSquare.textContent 
+                            }
+                            else {
+                                switchSquare.textContent = wordList[i]
+                                square.textContent = switchSquare.textContent
+                            }
+                            //put in first grid row
+                        } */
+                        if (catCount === 1) {
+                            var idstr = i;
+                            var topSquare = document.getElementById("s" + idstr.toString());
+                            topSquare.style.backgroundColor = colorList[catCount -1]
+                            topSquare.style.color = colorList[catCount -1]
+                            topSquare.style.border = colorList[catCount -1]
+                           // wordList.includes(topSquare.textContent) ? topSquare.textContent = topSquare.textContent : topSquare.textContent = wordList[i];
+                            if (wordList.includes(topSquare.textContent)) {
+                                topSquare.textContent = topSquare.textContent 
+                            }
+                            else {
+                                square.textContent = topSquare.textContent
+                                topSquare.textContent = wordList[i]
+                                square.style.backgroundColor = '#d3d3d3f5'
+                            }
+                            topSquare.setAttribute("disabled", "disabled");
+                            //put in second grid row
                         }
-                        else if (matchList[1] === true) {
-                            square.style.backgroundColor = '#DDCC77'
-                            square.style.color = '#DDCC77'
+                        else if (catCount === 2) {
+                            var idstr = i + 4;
+                            var midSquare = document.getElementById("s" + (i + 4));
+                            midSquare.style.backgroundColor = colorList[catCount -1]
+                            midSquare.style.color = colorList[catCount -1]
+                            midSquare.style.border = colorList[catCount -1]
+                            if (wordList.includes(midSquare.textContent)) {
+                                midSquare.textContent = midSquare.textContent 
+                            }
+                            else {
+                                square.textContent = midSquare.textContent
+                                midSquare.textContent = wordList[i]
+                                square.style.backgroundColor = '#d3d3d3f5'
+                            }
+                            midSquare.setAttribute("disabled", "disabled");
+                            //put in second grid row
                         }
-                        else if (matchList[2] === true) {
-                            square.style.backgroundColor = '#CC6677'
-                            square.style.color = '#CC6677'
+                        else if (catCount === 3) {
+                            var idstr1 = i + 8;
+                            var thirdSquare = document.getElementById("s" + (i + 8));
+                            thirdSquare.style.backgroundColor = colorList[catCount -1]
+                            thirdSquare.style.color = colorList[catCount -1]
+                            thirdSquare.style.border = colorList[catCount -1]
+                            if (wordList.includes(thirdSquare.textContent)) {
+                                thirdSquare.textContent = thirdSquare.textContent 
+                            }
+                            else {
+                                square.textContent = thirdSquare.textContent
+                                thirdSquare.textContent = wordList[i]
+                                square.style.backgroundColor = '#d3d3d3f5'
+                            }
+                            thirdSquare.setAttribute("disabled", "disabled");
+                            //put in third grid row
                         }
                         else {
-                            square.style.backgroundColor = '#44AA99'
-                            square.style.color = '#44AA99'
+                            square.style.backgroundColor = colorList[catCount -1]
+                            square.style.color = colorList[catCount -1]
+                            square.style.border = colorList[catCount -1]
+                            square.setAttribute("disabled", "disabled");
                         } 
-                        square.setAttribute("disabled", "disabled"); 
+                         
                         correctSquares.push(pressedSquares[i]);
                     }
                         
@@ -212,8 +276,7 @@ var jsPsychConnections = (function (jspsych) {
                    pressedSquares = [];
                    wordList = [];
                    matchList = [];
-                   console.log(pressedSquares)
-                   console.log(wordList)
+    
               });
           
           var response = {
@@ -234,7 +297,7 @@ var jsPsychConnections = (function (jspsych) {
                 //possibilities to add: 
                   rt: response.rt,
                   stimulus: trial.stimulus,
-                  pressed: pressedSquares,
+                  pressed: pressTimes,
                 
               };
               // clear the display
