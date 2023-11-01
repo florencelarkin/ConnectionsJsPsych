@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Connections</title>
+    
+    <script src="./jspsych/jspsych.js"></script>
+    <script src="./jspsych/plugin-html-button-response.js"></script>
+    <script src="./jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="./jspsych/plugin-connections.js"></script>
+    <script src="./main.js"></script>
+    <link href="./jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    
+  </body>
+  <script>
+    var timeline = [];
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        //jsPsych.data.displayData();
+      }
+    });
+    //IST
+
+var cat1 = ['category1', 'category1', 'category1', 'category1'];
+var cat2 = ['category2', 'category2', 'category2', 'category2'];
+var cat3 = ['category3', 'category3', 'category3', 'category3'];
+var cat4 = ['category4', 'category4', 'category4', 'category4'];
+var allWords = [cat1, cat2, cat3, cat4];
+
+
+function getPattern() {
+    allWords = allWords.flat(); 
+    let currentIndex = allWords.length,  randomIndex;
+
+    while (currentIndex > 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      [allWords[currentIndex], allWords[randomIndex]] = [
+        allWords[randomIndex], allWords[currentIndex]];
+    }
+    console.log(allWords);
+    return allWords
+};
+
+function getCorrect(array) {
+    
+}
+
+
+
+var gen_instructions = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <p>In this experiment, you will see a grid with words in each square
+      </p><p>These words fit into 4 categories made up of 4 words</p>
+      <p>You will try to guess which words belong in each category</p>
+      <p>When you select 4 different words, you will be told whether they are in the same category </p>
+      <p>If you are correct you will see the blocks change color and the category name written below the grid.</p>
+    `,
+    choices: ['BEGIN'],
+    post_trial_gap: 1000
+  };
+
+
+var trial = {
+    type: jsPsychConnections,
+    stimulus: getPattern,
+    category1name: '1',
+    category1: cat1,
+    category2name: '2',
+    category2: cat2,
+    category2name: '3',
+    category3: cat3,
+    category4name: '4',
+    category4: cat4,
+    data: {
+        task: 'response',
+        points: ''
+      },
+    on_finish: function(data){
+        
+      }
+};
+
+var end_page = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <p>Thanks for participating!</p>
+      <p>Press 'COMPLETE' to close out of the task</p>
+    `,
+    choices: ['COMPLETE'],
+  };
+
+
+timeline.push(gen_instructions, trial, end_page)
+jsPsych.run(timeline);
+
+
+  </script>
+</html>
