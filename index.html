@@ -22,10 +22,10 @@
     });
 
 //categories cannot have overlapping words!
-var cat1 = ['category1', 'category1', 'category1', 'category1'];
-var cat2 = ['category2', 'category2', 'category2', 'category2'];
-var cat3 = ['category3', 'category3', 'category3', 'category3'];
-var cat4 = ['category4', 'category4', 'category4', 'category4'];
+var cat1 = ['Apple', 'Pear', 'Banana', 'Orange'];
+var cat2 = ['Cat', 'Dog', 'Giraffe', 'Zebra'];
+var cat3 = ['Bus', 'Train', 'Plane', 'Boat'];
+var cat4 = ['Minneapolis', 'Los Angeles', 'Paris', 'London'];
 var allWords = [cat1, cat2, cat3, cat4];
 
 
@@ -65,13 +65,10 @@ var gen_instructions = {
 var trial = {
     type: jsPsychConnections,
     stimulus: getPattern,
-    category1name: '1',
+    categorynames: ['Fruits', 'Animals', 'Transportation', 'Cities'],
     category1: cat1,
-    category2name: '2',
     category2: cat2,
-    category3name: '3',
     category3: cat3,
-    category4name: '4',
     category4: cat4,
     data: {
         task: 'response',

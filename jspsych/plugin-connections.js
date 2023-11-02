@@ -11,41 +11,30 @@ var jsPsychConnections = (function (jspsych) {
               pretty_name: "Stimulus",
               default: undefined,
           },
-          category1name: {
-            type: jspsych.ParameterType.HTML_STRING,
+          categorynames: {
+            type: jspsych.ParameterType.ARRY,
             pretty_name: "Category1Name",
             default: undefined,
         },
+         
           category1: {
             type: jspsych.ParameterType.ARRAY,
             pretty_name: "Category1",
             default: undefined,
         },
-        category2name: {
-            type: jspsych.ParameterType.HTML_STRING,
-            pretty_name: "Category2Name",
-            default: undefined,
-        },
+
         category2: {
             type: jspsych.ParameterType.ARRAY,
             pretty_name: "Category2",
             default: undefined,
         },
-        category3name: {
-            type: jspsych.ParameterType.HTML_STRING,
-            pretty_name: "Category3Name",
-            default: undefined,
-        },
+        
         category3: {
             type: jspsych.ParameterType.ARRAY,
             pretty_name: "Category3",
             default: undefined,
         },
-        category4name: {
-            type: jspsych.ParameterType.HTML_STRING,
-            pretty_name: "Category4Name",
-            default: undefined,
-        },
+        
         category4: {
             type: jspsych.ParameterType.ARRAY,
             pretty_name: "Category4",
@@ -80,6 +69,7 @@ var jsPsychConnections = (function (jspsych) {
       gridSquares +='<div class="b" id=s' + i + '>'+ trial.stimulus[i] +'</div>';
     }
     var html = '<div>Connections<div/>'
+    html += '<div id="answers"><div class= "answers" style="position:absolute"></div></div>'
     html += '<div id="connections"><div class= "grid-container">' + gridSquares + '</div></div>'
     html += '<div id="submit-btn"><div class="jspsych-btn" id="submit-btn"> SUBMIT </div>';
       
@@ -154,10 +144,9 @@ var jsPsychConnections = (function (jspsych) {
     
         var matchList = [];
         var wordList = [];
-
-        var idNumber = '';
         var colorList = ['#88CCEE', '#DDCC77', '#CC6677', '#44AA99'];
         var catCount = 0;
+        var attemptCount = 0;
         //event listener for submit button
           display_element
                   .querySelector("#submit-btn")
@@ -166,21 +155,22 @@ var jsPsychConnections = (function (jspsych) {
                         var word = document.getElementById(pressedSquares[i]);
                         word = word.textContent; 
                         wordList.push(word)
-                        idNumber = pressedSquares[i].toString()
-                        idNumber = idNumber.substring(1)
-                        console.log(idNumber)
-                    }
                     
+                    }
+                    attemptCount++;
                     correctSquares.length === 16 ? end_trial() : null;
                         matchList.push(areEqual(wordList, trial.category1));
                         matchList.push(areEqual(wordList, trial.category2));
                         matchList.push(areEqual(wordList, trial.category3));
                         matchList.push(areEqual(wordList, trial.category4));
-                     
+                        var answer = document.getElementById("answers");
                     if (matchList.includes(true)) {
                         catCount++;
+                        
+                        answer.textContent = "Correct! " +trial.categorynames[matchList.indexOf(true)] + ': ' + wordList[0] + ', ' +wordList[1] + ', ' + wordList[2] + ', ' +wordList[3];
                         for (var i = 0; i < pressedSquares.length; i++) {
                         var square = document.getElementById(pressedSquares[i]);
+                        square.style.opacity = 0
                         
                         /*if (matchList[i] === true) {
                             var idstr = '';
@@ -197,7 +187,7 @@ var jsPsychConnections = (function (jspsych) {
                             }
                             //put in first grid row
                         } */
-                        if (catCount === 1) {
+                       /* if (catCount === 1) {
                             var idstr = i;
                             var topSquare = document.getElementById("s" + idstr.toString());
                             topSquare.style.backgroundColor = colorList[catCount -1]
@@ -248,23 +238,25 @@ var jsPsychConnections = (function (jspsych) {
                             }
                             thirdSquare.setAttribute("disabled", "disabled");
                             //put in third grid row
-                        }
+                        } 
                         else {
                             square.style.backgroundColor = colorList[catCount -1]
                             square.style.color = colorList[catCount -1]
                             square.style.border = colorList[catCount -1]
                             square.setAttribute("disabled", "disabled");
-                        } 
+                        } */
                          
                         correctSquares.push(pressedSquares[i]);
                     }
                         
                         //add to correctsquares list
                         pressedSquares = [];
+                        
                     }
                     else {
                         //clear list of squares
                         //TO DO: change square colors back to light gray
+                        answer.textContent = "Try Again";
                         for (var i = 0; i < pressedSquares.length; i++) { 
                             var square = document.getElementById(pressedSquares[i]);
                             square.style.backgroundColor = '#d3d3d3f5'
